@@ -1,50 +1,93 @@
-# Welcome to your Expo app 👋
+# ☕ Kawka Coffee House
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile loyalty application for a coffee shop, allowing customers to collect stamps, redeem coupons, and discover nearby cafeterias. Built with React Native and Expo as an engineering thesis project.
 
-## Get started
+## About
 
-1. Install dependencies
+Kawka Coffee House is a digital loyalty card system designed to replace traditional paper stamp cards. Customers can scan QR codes to collect stamps with each purchase, unlock rewards, and browse available cafeteria locations — all from their phone.
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **React Native** with **Expo** (file-based routing)
+- **JavaScript / JSX**
+- Custom components and styling
 
-   ```bash
-   npx expo start
-   ```
+## Features
 
-In the output, you'll find options to open the app in a
+- 🔐 User authentication (login & registration)
+- 📱 QR code generation for stamp collection
+- 🏷️ Digital stamp card system
+- 🎟️ Coupons and rewards
+- ☕ Cafeteria locations browser
+- 👤 User profile management
+- 🎨 Custom UI with Poppins font family
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+KawkaApp/
+├── app/
+│   ├── (tabs)/
+│   │   ├── index.jsx          # Home screen
+│   │   ├── stamps.jsx         # Stamp collection
+│   │   ├── coupons.jsx        # Available coupons
+│   │   ├── cafeterias.jsx     # Cafeteria locations
+│   │   └── profile.jsx        # User profile
+│   ├── _layout.jsx            # Root layout
+│   ├── login.jsx              # Login screen
+│   ├── register.jsx           # Registration screen
+│   └── gettingStarted.jsx     # Onboarding screen
+├── components/
+│   ├── Button.jsx             # Reusable button component
+│   ├── ButtonWithIcon.jsx     # Button with icon variant
+│   ├── Icon.jsx               # Icon component
+│   ├── ScreenContent.jsx      # Screen content wrapper
+│   ├── ScreenHeader.jsx       # Screen header component
+│   └── UserQRCode.jsx         # QR code display component
+├── styles/
+│   └── styles.js              # Global styles
+├── assets/
+│   ├── fonts/                 # Poppins font family
+│   └── images/                # App images and icons
+└── pages/
+    └── Screen.jsx             # Screen template
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-## Learn more
+### Prerequisites
 
-To learn more about developing your project with Expo, look at the following resources:
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- Expo Go app on your phone (for testing)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Installation
 
-## Join the community
+1. Clone the repository:
 
-Join our community of developers creating universal apps.
+```bash
+git clone https://github.com/pawelwadon/kawka-coffee-house.git
+cd kawka-coffee-house
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npx expo start
+```
+
+4. Scan the QR code with Expo Go (Android) or Camera app (iOS) to run on your device.
+
+## Status
+
+🚧 **Work in progress** — Client-side UI is mostly complete. Backend integration is planned for a future phase.
+
+## License
+
+This project is part of an engineering thesis at WSiZ in Bielsko-Biała.
