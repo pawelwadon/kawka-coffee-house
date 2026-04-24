@@ -2,10 +2,9 @@ import { StyleSheet } from 'react-native';
 
 const mainColor = '#EADCC1';
 const whiteColor = '#fffcf2';
-const greenColor = '#31572c';
+export const greenColor = '#31572c';
 const darkColor = '#313634';  
 const redColor = '#E01F4A';
-
 
 export const globalStyles =  StyleSheet.create({
   screen: {
@@ -56,23 +55,21 @@ export const globalStyles =  StyleSheet.create({
   fullButton: {
     width:'100%',
     backgroundColor: greenColor,
-    paddingVertical: 6,
-    display:'flex',
+    paddingVertical: 10,
     flexDirection:'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 2,
     borderColor: greenColor,
   },
   emptyButton: {
     width: '100%',
-    paddingVertical: 6,
-    display:'flex',
+    paddingVertical: 10,
     flexDirection:'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 2,
     borderColor: greenColor,
   },
@@ -81,7 +78,7 @@ export const globalStyles =  StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 14,
+    fontSize: 18,
     color: whiteColor,
   },
   boxShadow: {

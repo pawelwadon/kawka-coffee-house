@@ -1,10 +1,9 @@
 import QRCodeStyled from 'react-native-qrcode-styled';
 import { globalStyles } from "../styles/styles";
 
-export default function UserQRCode( ) {
+export default function UserQRCode( props ) {
 
-//logika do generowania kodu QR z danymi uzytkownika
     return (
-     <QRCodeStyled data={'https://www.instagram.com/kawka.oswiecim/'} style={[globalStyles.boxShadow, {backgroundColor:'#fffcf2', borderRadius:12}]} size={120} pieceSize={4} pieceCornerType={'rounded'} pieceBorderRadius={4} isPiecesGlued={true} padding={12}/>        
+     <QRCodeStyled data={props.userUID} style={[globalStyles.boxShadow, {backgroundColor:'#fffcf2', borderRadius:12}]} size={props.size} pieceSize={4} pieceCornerType={'rounded'} pieceBorderRadius={4} isPiecesGlued={true} padding={12}/>        
     );
 }

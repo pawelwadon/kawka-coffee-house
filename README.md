@@ -1,93 +1,168 @@
-# ☕ Kawka Coffee House
+# ☕ KawkaApp — Kawka Coffee House Loyalty App
 
-A mobile loyalty application for a coffee shop, allowing customers to collect stamps, redeem coupons, and discover nearby cafeterias. Built with React Native and Expo as an engineering thesis project.
+A full-stack mobile loyalty application built with React Native (Expo) and Firebase for Kawka Coffee House. Customers collect stamps, earn coupons, and redeem free coffee — all through a QR code-based system managed by baristas via an admin panel.
 
-## About
+## 📱 Features
 
-Kawka Coffee House is a digital loyalty card system designed to replace traditional paper stamp cards. Customers can scan QR codes to collect stamps with each purchase, unlock rewards, and browse available cafeteria locations — all from their phone.
+### Customer Panel
+- **QR Code** — unique QR code per user for barista scanning
+- **Stamps** — collect stamps with every coffee purchase (7 stamps = free coffee)
+- **Coupons** — redeem collected stamps for coupons with 3-month validity
+- **Cafeterias** — browse coffee shop locations with opening hours, directions, and call buttons
+- **Profile** — view personal statistics, change password, app info, contact, and logout
 
-## Tech Stack
+### Admin Panel
+- **QR Scanner** — scan customer QR codes using device camera to assign stamps
+- **Users** — browse all registered users with search functionality and detailed client profiles
+- **Statistics** — view stamp, coupon, and registration stats filtered by day, week, or month with activity history
 
-- **React Native** with **Expo** (file-based routing)
-- **JavaScript / JSX**
-- Custom components and styling
+## 🛠 Tech Stack
 
-## Features
+| Layer | Technology |
+|-------|-----------|
+| Framework | React Native (Expo) |
+| Navigation | Expo Router (file-based) |
+| Authentication | Firebase Authentication |
+| Database | Cloud Firestore |
+| Camera | expo-camera |
+| QR Code | react-native-qrcode-styled |
+| Animations | react-native-reanimated |
+| Icons | react-native-svg (custom SVG paths) |
+| Styling | StyleSheet (CSS-in-JS) |
+| Font | Poppins (expo-font) |
+| Testing | Jest |
 
-- 🔐 User authentication (login & registration)
-- 📱 QR code generation for stamp collection
-- 🏷️ Digital stamp card system
-- 🎟️ Coupons and rewards
-- ☕ Cafeteria locations browser
-- 👤 User profile management
-- 🎨 Custom UI with Poppins font family
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 KawkaApp/
 ├── app/
-│   ├── (tabs)/
-│   │   ├── index.jsx          # Home screen
-│   │   ├── stamps.jsx         # Stamp collection
-│   │   ├── coupons.jsx        # Available coupons
-│   │   ├── cafeterias.jsx     # Cafeteria locations
-│   │   └── profile.jsx        # User profile
-│   ├── _layout.jsx            # Root layout
-│   ├── login.jsx              # Login screen
-│   ├── register.jsx           # Registration screen
-│   └── gettingStarted.jsx     # Onboarding screen
+│   ├── _layout.jsx          # Root layout (auth, fonts, context)
+│   ├── (auth)/               # Login, register, getting started
+│   │   ├── _layout.jsx
+│   │   ├── gettingStarted.jsx
+│   │   ├── login.jsx
+│   │   └── register.jsx
+│   ├── (tabs)/               # Customer panel
+│   │   ├── _layout.jsx
+│   │   ├── index.jsx         # Home screen
+│   │   ├── stamps.jsx
+│   │   ├── coupons.jsx
+│   │   ├── cafeterias.jsx
+│   │   └── profile.jsx
+│   └── (admin)/              # Admin panel
+│       ├── _layout.jsx
+│       ├── index.jsx         # QR Scanner
+│       ├── users.jsx
+│       ├── clientDetails.jsx
+│       └── statistics.jsx
 ├── components/
-│   ├── Button.jsx             # Reusable button component
-│   ├── ButtonWithIcon.jsx     # Button with icon variant
-│   ├── Icon.jsx               # Icon component
-│   ├── ScreenContent.jsx      # Screen content wrapper
-│   ├── ScreenHeader.jsx       # Screen header component
-│   └── UserQRCode.jsx         # QR code display component
+│   ├── Button.jsx
+│   ├── ButtonWithIcon.jsx
+│   ├── Icon.jsx
+│   ├── Input.jsx
+│   ├── Screen.jsx
+│   ├── ScreenBackground.jsx
+│   ├── ScreenContent.jsx
+│   ├── ScreenHeader.jsx
+│   ├── ScanUserQRCode.jsx
+│   ├── StampAssignModal.jsx
+│   └── UserQRCode.jsx
+├── context/
+│   └── AuthContext.js
+├── firebase/
+│   ├── FirebaseConfig.js
+│   ├── addStamps.js
+│   └── addVisitsHistory.js
+├── pages/
+│   └── Screen.jsx
 ├── styles/
-│   └── styles.js              # Global styles
+│   └── styles.js
 ├── assets/
-│   ├── fonts/                 # Poppins font family
-│   └── images/                # App images and icons
-└── pages/
-    └── Screen.jsx             # Screen template
+│   ├── fonts/                # Poppins font family
+│   └── images/
+├── __tests__/
+│   └── helpers.test.js
+├── .env                      # Firebase API keys (not in repo)
+└── .gitignore
 ```
 
-## Getting Started
+## 🔥 Firebase Structure
+
+### Firestore Collections
+
+**users/{uid}**
+```
+{
+  name: string,
+  surname: string,
+  stamps: number,
+  coupons: [{ expirationDate: string }],
+  visits: [{ collectedStamps: number, dateOfVisit: string, type: string }],
+  allTimeStamps: number,
+  allTimeCoupons: number,
+  role: "client" | "admin"
+}
+```
+
+**history/{auto-id}**
+```
+{
+  client: string,
+  activity: string,
+  type: "stamp" | "coupon" | "registration",
+  count: number,
+  dateOfVisit: Timestamp
+}
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- [Node.js](https://nodejs.org/) (LTS recommended)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- Expo Go app on your phone (for testing)
+- Node.js (v18+)
+- npm
+- Expo CLI (`npm install -g expo-cli`)
+- Expo Go app on your mobile device
 
 ### Installation
 
-1. Clone the repository:
-
 ```bash
-git clone https://github.com/pawelwadon/kawka-coffee-house.git
-cd kawka-coffee-house
-```
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/KawkaApp.git
+cd KawkaApp
 
-2. Install dependencies:
-
-```bash
+# Install dependencies
 npm install
+
+# Create .env file with Firebase config
+touch .env
 ```
 
-3. Start the development server:
+Add your Firebase credentials to `.env`:
+```
+EXPO_PUBLIC_API_KEY=your_api_key_here
+```
+
+### Running the app
 
 ```bash
+# Start Expo development server
 npx expo start
+
+# Scan QR code with Expo Go (Android) or Camera (iOS)
 ```
 
-4. Scan the QR code with Expo Go (Android) or Camera app (iOS) to run on your device.
+## 🧪 Testing
 
-## Status
+```bash
+# Run unit tests
+npx jest
+```
 
-🚧 **Work in progress** — Client-side UI is mostly complete. Backend integration is planned for a future phase.
+## 👤 Author
 
-## License
+Paweł Wadoń — Engineering thesis project at WSIiZ Bielsko-Biała
 
-This project is part of an engineering thesis at WSiZ in Bielsko-Biała.
+## 📄 License
+
+This project was created as an engineering thesis and is not licensed for commercial use.
