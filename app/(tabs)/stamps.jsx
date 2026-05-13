@@ -78,6 +78,14 @@ const StampsCard = ( props ) => {
     }
   };
 
+  const handleCollect = (userStamps, user)  => {
+    if(userStamps <7 ){
+      alert('Nie masz wystarczającej liczby pieczątek')
+    }else{
+      collectCoupon(userStamps, user)
+    }
+  }
+
 export default function Stamps() {
 
   const { user, userData } = useContext(AuthContext);
@@ -91,7 +99,7 @@ export default function Stamps() {
     >
       <View style={{gap:24, padding:24}}>
         <StampsCard userStamps={userStamps}/>
-        <Button style={globalStyles.fullButton} buttonText={'Odbierz kupon'} onPress={() => collectCoupon(userStamps, user)}/>
+        <Button style={globalStyles.fullButton} buttonText={'Odbierz kupon'} onPress={() => handleCollect(userStamps, user)}/>
       </View>  
     </Screen>
   );

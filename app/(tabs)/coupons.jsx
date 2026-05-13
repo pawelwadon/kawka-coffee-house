@@ -4,10 +4,14 @@ import AuthContext from '../../context/AuthContext';
 import { FIREBASE_DB } from "../../firebase/FirebaseConfig";
 import { doc, updateDoc, arrayRemove, increment, arrayUnion } from "firebase/firestore";
 import { addVisitsHistory } from '../../firebase/addVisitsHistory';
+import SwipeButton from 'rn-swipe-button';
 import Screen from "../../pages/Screen";
 import Button from "../../components/Button";
+import Icon from "../../components/Icon";
 import { globalStyles } from "../../styles/styles";
 import couponStructure from '../../assets/images/karta-na-pieczatki.png';
+
+let iconPath = "M109.575,0C49.156,0,0.002,49.155,0.002,109.576c0,60.419,49.154,109.574,109.573,109.574s109.573-49.155,109.573-109.574 C219.148,49.155,169.994,0,109.575,0z M109.575,204.15c-52.148,0-94.573-42.426-94.573-94.574C15.002,57.427,57.427,15,109.575,15 s94.573,42.427,94.573,94.576C204.148,161.725,161.723,204.15,109.575,204.15z M124.29,62.645c-2.929-2.928-7.678-2.928-10.606,0c-2.929,2.93-2.929,7.678,0,10.607l28.821,28.82l-83.457,0.008 c-4.143,0-7.5,3.358-7.5,7.501c0,4.142,3.358,7.499,7.5,7.499l83.46-0.008l-28.827,28.825c-2.929,2.929-2.929,7.678,0,10.606 c1.464,1.465,3.384,2.197,5.303,2.197c1.919,0,3.839-0.732,5.303-2.196l41.629-41.627c1.407-1.407,2.197-3.314,2.197-5.304 c0-1.989-0.79-3.897-2.197-5.304L124.29,62.645z";
 
 const redeemCoupon = async (user, expirationDate, userName ) => {
     const currentDate = new Date();
@@ -32,6 +36,15 @@ const redeemCoupon = async (user, expirationDate, userName ) => {
   };
 }
 
+const handleRedeem = (user, date, userName) => {
+  alert('Twój kupon został wykorzystany');
+  redeemCoupon(user, date, userName);
+};
+
+const ThumbIcon = () => (
+  <Icon path={iconPath} viewBox='0 0 219.15 219.15' height={30} width={30} />
+);
+
 const Coupon = (props) => {
   return (
     <View style={globalStyles.boxShadow}>
@@ -42,7 +55,7 @@ const Coupon = (props) => {
         </View>
         <View style={{gap:6}}>
           <Text style={globalStyles.bodyText}>Ważny do: {props.date}</Text>
-          <Button onPress={() => redeemCoupon(props.user,props.date, props.userName)} style={globalStyles.fullButton} buttonText={'Zrealizuj'} variant="full" />
+          <SwipeButton title="Przesuń, aby odebrać" onSwipeSuccess={() => handleRedeem(props.user, props.date, props.userName)} swipeSuccessThreshold={90} thumbIconComponent={ThumbIcon} railBackgroundColor="#fffcf2" containerStyles={{borderWidth: 2, margin:0}} railBorderColor="#31572c" thumbIconBackgroundColor="#31572c" thumbIconBorderColor="#31572c" titleColor="#31572c" height={40} railFillBackgroundColor="#31572c" railFillBorderColor="#31572c" titleStyles={{fontFamily: "Poppins-Bold", fontSize: 18, color: "#31572c", width: "100%", textAlign: "right", paddingRight:12}}/>
         </View>
       </ImageBackground>
     </View>

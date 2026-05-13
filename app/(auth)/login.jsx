@@ -1,14 +1,14 @@
+import { Text, View, Image, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View, Image, ActivityIndicator } from "react-native";
+import { FIREBASE_AUTH } from "../../firebase/FirebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Screen from "../../pages/Screen";
 import { globalStyles } from "../../styles/styles";
-import coffeBeansBottom from "../../assets/images/coffe-beans-bottom.png";
 import coffeBeansTop from "../../assets/images/coffe-beans-top.png";
-import { FIREBASE_AUTH } from "../../firebase/FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import coffeBeansBottom from "../../assets/images/coffe-beans-bottom.png";
 
 export default function Login() {
 
@@ -20,36 +20,48 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState(false);
   const auth = FIREBASE_AUTH;
+
+  const authErrors = {
+  "auth/missing-password": "Podaj hasło",
+  "auth/invalid-email": "Nieprawidłowy adres e-mail",
+  "auth/invalid-credential": "Nieprawidłowy e-mail lub hasło",
+  "auth/user-disabled": "To konto zostało zablokowane",
+  "auth/too-many-requests": "Za dużo prób. Spróbuj ponownie za chwilę",
+  "auth/network-request-failed": "Brak połączenia z internetem",
+  };
   
-  const SingIn = async() => {
+  const SignIn = async() => {
     setLoading(true);
     try{
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
     }catch(error){
       console.log(error);
-      alert('Logowanie nieudane ' + error.message);
+      const message = authErrors[error.code] ?? "Logowanie nieudane. Spróbuj ponownie.";
+      alert(message);
     }finally{
       setLoading(false);
     }
   }
 
   return (
-    <Screen headerText={"Logowanie"} headerStyle={style.headerStyle}>
+  <Screen headerText={"Logowanie"} headerStyle={style.headerStyle}>
     <Image source={coffeBeansTop} resizeMode="contain" style={{position:'absolute', top:-350, right:0, width:80}}/>
-      <View style={{ padding: 24, gap: 24 }}>
+    <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0} style={{ flex: 1 }}>
+      <ScrollView  contentContainerStyle={{ padding: 24, gap: 24 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={[globalStyles.boxShadow,{ backgroundColor: "#fffcf2", padding: 20, borderRadius: 22, gap:12}]}>
           <Text style={{textAlign: "center", fontSize: 18, fontFamily: "Poppins-SemiBold", color: "#31572c"}}>Zaloguj się do swojego konta</Text>
           <View>
             <Input label={"E-mail"} placeholder={"twoj@email.pl"} setValue={(text)=>setEmail(text)} path={iconPaths.mail} viewBox={'0 0 512 512'}/>
-            <Input label={"Hasło"} placeholder={"Hasło"} setValue={(text)=>setPassword(text)} path={iconPaths.lock} viewBox={'0 0 512 512'} secureTextEntry={true}/>            
+            <Input label={"Hasło"} placeholder={"Hasło"} setValue={(text)=>setPassword(text)} path={iconPaths.lock} viewBox={'0 0 512 512'} secureTextEntry={true}/>
           </View>
-          {loading ? <ActivityIndicator  color={"#31572c"}/> : 
-          <Button
-            onPress={SingIn}
-            buttonText={"Zaloguj się"}
-            style={globalStyles.fullButton}/>
+            {loading ? <ActivityIndicator color={"#31572c"}/> : 
+            <Button
+              onPress={SignIn}
+              buttonText={"Zaloguj się"}
+              style={globalStyles.fullButton}/>
           }
         </View>
         <View style={{ flexDirection: "row", justifyContent: "center", gap: 4, alignItems: "center" }}>
@@ -58,11 +70,11 @@ export default function Login() {
             <Text style={{ color: "#31572c", fontFamily: "Poppins-Bold" }}>Zarejestruj się</Text>
           </Link>
         </View>
-      </View>
-      <Image source={coffeBeansBottom} resizeMode="contain" style={{position:'absolute', bottom:0, left:0, zIndex:-1}}/>
-      {/* <Image source={coffeBeansBottom} resizeMode="contain" style={{position:'absolute', bottom:0, right:0, zIndex:-1, transform:[{rotateZ: '180deg'}, {rotateX: '180deg'}] }}/> */}
-    </Screen>
-  );
+      </ScrollView>
+    </KeyboardAvoidingView>
+    <Image source={coffeBeansBottom} resizeMode="contain" style={{position:'absolute', bottom:0, left:0, zIndex:-1}}/>
+  </Screen>
+);
 }
 
 const style = StyleSheet.create({
@@ -76,5 +88,10 @@ const style = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     letterSpacing: -2,
     color: "#31572c",
+  },
+  passwordRequirement:{
+    fontSize:10,
+    fontFamily:'Poppins-Light',
+    marginTop:-8
   },
 });

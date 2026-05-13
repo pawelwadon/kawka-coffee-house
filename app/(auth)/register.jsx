@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, ActivityIndicator } from "react-native";
+import { Text, View, Image, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useState } from "react";
 import { Link } from "expo-router";
 import { FIREBASE_AUTH } from "../../firebase/FirebaseConfig";
@@ -28,7 +28,18 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
-  const SingUp = async() => {
+  const authErrors = {
+  "auth/email-already-in-use": "Konto z tym adresem e-mail już istnieje",
+  "auth/weak-password": "Hasło jest za słabe",
+  "auth/missing-password": "Podaj hasło",
+  "auth/invalid-email": "Nieprawidłowy adres e-mail",
+  "auth/invalid-credential": "Nieprawidłowy e-mail lub hasło",
+  "auth/user-disabled": "To konto zostało zablokowane",
+  "auth/too-many-requests": "Za dużo prób. Spróbuj ponownie za chwilę",
+  "auth/network-request-failed": "Brak połączenia z internetem",
+  };
+
+  const SignUp = async() => {
     setLoading(true);
     try{
       const response = await createUserWithEmailAndPassword(auth, email, password);
@@ -46,29 +57,40 @@ export default function Register() {
       console.log(response);
     }catch(error){
       console.log(error)
-      alert('Rejestracja nieudane ' + error.message);
+      const message = authErrors[error.code] ?? "Rejestracja nieudane. Spróbuj ponownie.";
+      alert(message);
     }finally{
       setLoading(false);
     }
   }
 
+  const handleSignUp = () => {
+  if (name.length < 1 || surname.length < 1) {
+    alert("Uzupełnij brakujące pola");
+    return;
+  }
+  SignUp();
+};
+
   return (
-    <Screen headerText={"Rejestracja"} headerStyle={style.headerStyle}>
-      <View style={{ padding: 24, gap: 24 }}>
-        <View
-          style={[globalStyles.boxShadow,{ backgroundColor: "#fffcf2", padding: 20, borderRadius: 22, gap:12 }]}>
-          <Text style={{ textAlign: "center",fontSize: 18,fontFamily: "Poppins-SemiBold",color: "#31572c" }}> Utwórz nowe konto </Text>
+  <Screen headerText={"Rejestracja"} headerStyle={style.headerStyle}>
+    <Image source={coffeBeansTop} resizeMode="contain" style={{position:'absolute', top:-350, right:0, width:80}}/>
+    <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0} style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: 24, gap: 24 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <View style={[globalStyles.boxShadow,{ backgroundColor: "#fffcf2", padding: 20, borderRadius: 22, gap:12 }]}>
+          <Text style={{ textAlign: "center",fontSize: 18,fontFamily: "Poppins-SemiBold",color: "#31572c" }}>Utwórz nowe konto</Text>
           <View>
             <Input label={"Imię"} placeholder={"Jan"} setValue={(text)=>setName(text)} path={iconPaths.profile} viewBox={'0 0 512 512'}/>
             <Input label={"Nazwisko"} placeholder={"Kowalski"} setValue={(text)=>setSurname(text)} path={iconPaths.profile} viewBox={'0 0 512 512'}/>
             <Input label={"E-mail"} placeholder={"twoj@email.pl"} setValue={(text)=>setEmail(text)} path={iconPaths.mail} viewBox={'0 0 512 512'}/>
             <Input label={"Hasło"} placeholder={"Hasło"} setValue={(text)=>setPassword(text)} path={iconPaths.lock} viewBox={'0 0 512 512'} secureTextEntry={true}/>
+            {password.length > 0 && (<Text style={style.passwordRequirement}>Hasło powinno składać się z min. 6 znaków w tym 1 wielkiej litery, 1 cyfry oraz 1 znaku specjalnego</Text>)}
           </View>
-          {loading ? <ActivityIndicator  color={"#31572c"}/> : 
-          <Button
-            onPress={SingUp}
-            buttonText={"Zarejestruj się"}
-            style={globalStyles.fullButton}/>
+          {loading ? <ActivityIndicator color={"#31572c"}/> : 
+            <Button
+              onPress={handleSignUp}
+              buttonText={"Zarejestruj się"}
+              style={globalStyles.fullButton}/>
           }
         </View>
         <View style={{ flexDirection: "row",justifyContent: "center",gap: 4,alignItems: "center" }}>
@@ -77,9 +99,11 @@ export default function Register() {
             <Text style={{ color: "#31572c", fontFamily: "Poppins-Bold" }}>Zaloguj się</Text>
           </Link>
         </View>
-      </View>
-    </Screen>
-  );
+      </ScrollView>
+    </KeyboardAvoidingView>
+    <Image source={coffeBeansBottom} resizeMode="contain" style={{position:'absolute', bottom:0, left:0, zIndex:-1}}/>
+  </Screen>
+);
 }
 
 const style = StyleSheet.create({
@@ -93,5 +117,10 @@ const style = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     letterSpacing: -2,
     color: "#31572c",
+  },
+    passwordRequirement:{
+    fontSize:10,
+    fontFamily:'Poppins-Light',
+    marginTop:-8
   },
 });
